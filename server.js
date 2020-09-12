@@ -60,16 +60,18 @@ app.post("/api/notes", function (req, res) {
 
 // Delete Saved Notes
 app.delete ("/api/notes/:id", function (req, res){
-
-var filteredNotes = db.filter ( (note) => 
-  note.id != req.params.id
-  
-);
-console.log(filteredNotes)
-fs.writeFileSync (path.join (__dirname, "./db/db.json"), JSON.stringify  (filteredNotes) )
-return res.json(db);
-
-});
+ 
+  db = db.filter ( (note) => 
+    note.id != req.params.id
+    
+  );
+  console.log(db)
+  // changing to a writeFile function allows us to send a status of 200 -- good call
+  fs.writeFile (path.join (__dirname, "./db/db.json"), JSON.stringify(db), function(err){
+      if(err) throw err;
+      res.sendStatus(200);
+  } )
+  });
 
 
 
